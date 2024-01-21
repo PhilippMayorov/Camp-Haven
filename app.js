@@ -6,6 +6,8 @@ const Campground = require('./models/campground')
 const ejsMate = require('ejs-mate')
 const catchAsync = require('./utils/catchAsync')
 const ExpressError = require('./utils/ExpressError')
+const Joi = require('joi')
+const { campgroundSchema } = require('./schemas.js')
 
 mongoose
   .connect('mongodb://localhost:27017/campHaven')
@@ -30,6 +32,16 @@ app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({ extended: true }))
 
+// Campground middleware the ensures user input correct data
+const validateCampground = (req, res, next) => {
+  const { error } = campgroundSchema.validate(req.body)
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(',')
+    throw new ExpressError(msg, 400)
+  } else {
+    next()
+  }
+}
 // name _method does not work
 app.use(methodOverride('_method'))
 
@@ -48,10 +60,8 @@ app.get('/campgrounds/new', (req, res) => {
 
 app.post(
   '/campgrounds',
+  validateCampground,
   catchAsync(async (req, res, next) => {
-    // catchAsync catches error then throws it off to app.use function
-    if (!req.body.campground)
-      throw new ExpressError('Invalid campground Data', 400)
     const campground = new Campground(req.body.campground)
     await campground.save()
     res.redirect(`/campgrounds/${campground._id}`)
@@ -70,6 +80,7 @@ app.get('/campgrounds/:id/edit', async (req, res) => {
 
 app.post(
   '/campgrounds/:id',
+  validateCampground,
   catchAsync(async (req, res) => {
     const { id } = req.params
     const campground = await Campground.findByIdAndUpdate(id, {
@@ -95,8 +106,9 @@ app.all('*', (req, res, next) => {
 
 // basic error handler
 app.use((err, req, res, next) => {
-  const { statusCode = 500, message = 'somthing went wrong' } = err
-  res.status(statusCode).send(message)
+  const { statusCode = 500, message = 'something went wrong' } = err
+  if (!err.message) err.message = 'OH no something went wrong'
+  res.status(statusCode).render('error', { err })
 })
 
 app.listen(3000, () => {
