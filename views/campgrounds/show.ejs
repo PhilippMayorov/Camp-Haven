@@ -1,8 +1,8 @@
 <% layout("layouts/broilerplate") %>
 
-<div class="row">
-  <div class="d-flex justify-content-center">
-    <div class="card mb-3" style="width: 50%">
+<div class="row row d-flex justify-content-center">
+  <div class="" style="width: 50%">
+    <div class="card mb-3">
       <img
         src="<%= campground.image%>"
         class="card-img-top"
@@ -35,5 +35,23 @@
         <a href="/campgrounds">All campgrounds</a>
       </div>
     </div>
+    <h2>Leave a Review</h2>
+    <form clas="mb-3" action="">
+      <div class="mb-3">
+        <label class="form-label" for="rating">Rating</label>
+        <input class="form-range" type="range" min="1" max="5" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="review">Review</label>
+        <textarea
+          class="form-control"
+          name="review[body]"
+          id="bodd"
+          cols="20"
+          rows="5"
+        ></textarea>
+      </div>
+      <button class="btn btn-success">Submit</button>
+    </form>
   </div>
 </div>
