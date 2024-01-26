@@ -7,7 +7,7 @@ const camgroundsSchema = new Schema({
   price: Number,
   description: String,
   location: String,
-  review: [
+  reviews: [
     {
       type: Schema.ObjectId,
       ref: 'Review',

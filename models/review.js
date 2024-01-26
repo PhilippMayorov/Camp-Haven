@@ -3,8 +3,8 @@ const { schema } = require('./campground')
 const Schema = mongoose.Schema
 
 const review = new Schema({
-  body: String,
   rating: Number,
+  body: String,
 })
 
-module.export = mongoose.modoel('Review', review)
+module.exports = mongoose.model('review', review)
