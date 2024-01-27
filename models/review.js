@@ -1,10 +1,9 @@
 const mongoose = require('mongoose')
-const { schema } = require('./campground')
 const Schema = mongoose.Schema
 
-const review = new Schema({
-  rating: Number,
+const reviewSchema = new Schema({
   body: String,
+  rating: Number,
 })
 
-module.exports = mongoose.model('review', review)
+module.exports = mongoose.model('Review', reviewSchema)

@@ -108,7 +108,7 @@ app.delete(
   '/campgrounds/:id',
   catchAsync(async (req, res) => {
     const { id } = req.params
-    await Campground.deleteOne({ _id: id })
+    await Campground.findByIdAndDelete(id)
     res.redirect('/campgrounds')
   })
 )
