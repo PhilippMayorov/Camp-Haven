@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
+const { campgroundSchema } = require('../schemas')
 const Schema = mongoose.Schema
 
-const camgroundsSchema = new Schema({
+const CampgroundSchema = new Schema({
   title: String,
   image: String,
   price: Number,
@@ -10,9 +11,13 @@ const camgroundsSchema = new Schema({
   reviews: [
     {
       type: Schema.ObjectId,
-      ref: 'Review',
+      ref: 'review',
     },
   ],
 })
 
-module.exports = mongoose.model('campground', camgroundsSchema)
+CampgroundSchema.post('findOneAndDelete', async function () {
+  console.log('DELETED!')
+})
+
+module.exports = mongoose.model('campground', CampgroundSchema)

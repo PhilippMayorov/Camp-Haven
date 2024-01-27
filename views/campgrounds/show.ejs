@@ -1,7 +1,7 @@
 <% layout("layouts/broilerplate") %>
 
-<div class="row row d-flex justify-content-center">
-  <div class="" style="width: 50%">
+<div class="row">
+  <div class="col-md-6">
     <div class="card mb-3">
       <img
         src="<%= campground.image%>"
@@ -27,7 +27,7 @@
           action="/campgrounds/<%=campground.id%>?_method=DELETE"
           method="POST"
         >
-          <button class="btn btn-danger">delete</button>
+          <button class="btn btn-danger">Delete</button>
         </form>
       </div>
       <div class="card-footer text-muted">
@@ -35,6 +35,8 @@
         <a href="/campgrounds">All campgrounds</a>
       </div>
     </div>
+  </div>
+  <div class="col-6">
     <h2>Leave a Review</h2>
     <form
       class="validated-form"
@@ -65,8 +67,23 @@
         ></textarea>
         <div class="valid-feedback">Looks good!</div>
       </div>
-
-      <button class="btn btn-success">Submit</button>
+      <button class="mb-3 btn btn-success">Submit</button>
     </form>
+    <% for(let review of campground.reviews) {%>
+
+    <div class="card mb-3">
+      <div class="card-body">
+        <h5>Rating: <%=review.rating%></h5>
+        <p>Review: <%=review.body%></p>
+        <form
+          class="d-inline"
+          action="/campgrounds/<%=campground.id%>/reviews/<%=review.id%>?_method=DELETE"
+          method="POST"
+        >
+          <button class="btn btn-danger btn-sm">Delete</button>
+        </form>
+      </div>
+    </div>
+    <%} %>
   </div>
 </div>
