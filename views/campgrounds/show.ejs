@@ -69,15 +69,15 @@
       </div>
       <button class="mb-3 btn btn-success">Submit</button>
     </form>
-    <% for(let review of campground.reviews) {%>
 
+    <% for(let i = campground.reviews.length -1; i >= 0; i--) {%>
     <div class="card mb-3">
       <div class="card-body">
-        <h5>Rating: <%=review.rating%></h5>
-        <p>Review: <%=review.body%></p>
+        <h5>Rating: <%=campground.reviews[i]["rating"]%>/5</h5>
+        <p><%=campground.reviews[i].body%></p>
         <form
           class="d-inline"
-          action="/campgrounds/<%=campground.id%>/reviews/<%=review.id%>?_method=DELETE"
+          action="/campgrounds/<%=campground.id%>/reviews/<%=campground.reviews[i].id%>?_method=DELETE"
           method="POST"
         >
           <button class="btn btn-danger btn-sm">Delete</button>
