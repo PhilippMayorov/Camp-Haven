@@ -6,15 +6,14 @@ const ejsMate = require('ejs-mate')
 const catchAsync = require('./utils/catchAsync')
 const ExpressError = require('./utils/ExpressError')
 const session = require('express-session')
-const Joi = require('joi')
-const { campgroundSchema, reviewSchema } = require('./schemas.js')
-const Campground = require('./models/campground')
-const Review = require('./models/review')
-
 const flash = require('connect-flash')
+const passport = require('passport')
+const LocalStrategy = require('passport-local')
+const User = require('./models/user')
 
 const campgrounds = require('./routes/camgrounds')
-const reviews = require('./routes/reviews')
+const reviewRoutes = require('./routes/reviews')
+const usersRoutes = require('./routes/user')
 
 mongoose.connect('mongodb://localhost:27017/campHaven', {})
 
@@ -28,8 +27,8 @@ const app = express()
 
 app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs')
-
 app.set('views', path.join(__dirname, 'views'))
+
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
 
@@ -44,8 +43,16 @@ const sessionConfig = {
 }
 app.use(session(sessionConfig))
 app.use(flash())
+app.use(passport.initialize())
+app.use(passport.session())
+passport.use(new LocalStrategy(User.authenticate()))
+
+passport.serializeUser(User.serializeUser())
+passport.deserializeUser(User.deserializeUser())
 
 app.use((req, res, next) => {
+  console.log(req.user)
+  res.locals.currentUser = req.user; 
   res.locals.success = req.flash('success')
   res.locals.error = req.flash('error')
   next()
@@ -53,9 +60,16 @@ app.use((req, res, next) => {
 
 // name _method does not work
 app.use(methodOverride('_method'))
-
+app.use('/', usersRoutes)
 app.use('/campgrounds', campgrounds)
-app.use('/campgrounds/:id/reviews', reviews)
+app.use('/campgrounds/:id/reviews', reviewRoutes)
+
+app.get('/fakeUser', async (req, res) => {
+  const user = new User({ email: 'email@gmail.com', username: 'philipp' })
+  // Second param is password
+  const newUser = await User.register(user, 'chicken')
+  res.send(newUser)
+})
 
 app.get('/', (req, res) => {
   res.render('home')
