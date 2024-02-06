@@ -7,7 +7,6 @@ const { storeReturnTo } = require('../middleware');
 
 
 router.get('/register', (req, res) => {
-  console.log('testing')
   res.render('users/register')
 })
 
