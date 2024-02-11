@@ -1,3 +1,12 @@
+if (process.env.NODE_ENV !== "production")
+{
+  require("dotenv").config()
+}
+
+console.log("TEST")
+console.log(process.env.SECRET)
+console.log(process.env.API_KEY)
+
 const express = require('express')
 const path = require('path')
 const mongoose = require('mongoose')
@@ -63,13 +72,6 @@ app.use(methodOverride('_method'))
 app.use('/', usersRoutes)
 app.use('/campgrounds', campgrounds)
 app.use('/campgrounds/:id/reviews', reviewRoutes)
-
-app.get('/fakeUser', async (req, res) => {
-  const user = new User({ email: 'email@gmail.com', username: 'philipp' })
-  // Second param is password
-  const newUser = await User.register(user, 'chicken')
-  res.send(newUser)
-})
 
 app.get('/', (req, res) => {
   res.render('home')
