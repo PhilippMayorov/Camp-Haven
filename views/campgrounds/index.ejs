@@ -1,6 +1,8 @@
 <% layout("layouts/boilerplate") %>
-<h1>All campgrounds</h1>
 
+<div id="map" style = "width: 100%; height: 500px"></div>
+
+<h1>All campgrounds</h1>
 <% for(let campground of campgrounds){%>
 <div class="card" mb-3>
   <div class="row">
@@ -29,3 +31,9 @@
   </div>
   <% } %>
 </div>
+
+<script>
+  const mapToken = '<%-process.env.MAPBOX_TOKEN%>'
+</script>
+
+<script src="/javascripts/clusterMap.js"></script>

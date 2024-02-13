@@ -37,7 +37,7 @@ const seedDB = async () => {
     //   query: location,
     //   limit: 1
     // }).send()
-
+    
     // const geometry = geoData.body.features[0].geometry
 
     const camp = new Campground({
@@ -52,7 +52,7 @@ const seedDB = async () => {
     // For now using fake data to not overload API
       geometry: 
       {
-        type: 'Point', coordinates: [ -117.566541, 33.974707 ]
+        type: 'Point', coordinates: [cities[random1000].longitude, cities[random1000].latitude]
       },
       images:  [
         {
