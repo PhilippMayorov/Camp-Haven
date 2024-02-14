@@ -14,3 +14,5 @@ new mapboxgl.Marker()
     .setHTML(`<h3>${campground.title}</h3>`)
 )
 .addTo(map)
+
+map.addControl(new mapboxgl.NavigationControl());

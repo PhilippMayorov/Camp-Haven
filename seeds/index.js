@@ -3,10 +3,6 @@ const Campground = require('../models/campground')
 const cities = require('./cities')
 const { descriptors, places } = require('./seedHelpers')
 
-const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
-const mapBoxToken = process.env.MAPBOX_TOKEN;
-const geocoder = mbxGeocoding({ accessToken: 'pk.eyJ1IjoicGhpbGlwcGRldiIsImEiOiJjbHNoeWVkdWoxbWZhMmtvNmYwMjJwaTlzIn0.yX1FXJFPMRBH1abMahFwiw'});
-
 mongoose
   .connect('mongodb://localhost:27017/campHaven')
   .then(() => {
@@ -27,7 +23,7 @@ const sample = (array) => Math.floor(Math.random() * array.length)
 
 const seedDB = async () => {
   await Campground.deleteMany({})
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 100; i++) {
     const random1000 = Math.floor(Math.random() * 1000)
     const price = Math.floor(Math.floor(Math.random() * 20) + 10)
 
@@ -37,7 +33,7 @@ const seedDB = async () => {
     //   query: location,
     //   limit: 1
     // }).send()
-    
+
     // const geometry = geoData.body.features[0].geometry
 
     const camp = new Campground({
