@@ -24,9 +24,9 @@ const mongoSanitize = require('express-mongo-sanitize');
 
 const MongoStore = require('connect-mongo');
 
-const dbUrl = "mongodb://localhost:27017/campHaven"
+const dbUrl = process.env.DBURL || "mongodb://localhost:27017/campHaven"
 
-mongoose.connect('mongodb://localhost:27017/campHaven', {})
+mongoose.connect(dbUrl, {})
 
 const db = mongoose.connection
 
