@@ -52,8 +52,8 @@ const seedDB = async () => {
       },
       images:  [
         {
-          url: 'https://res.cloudinary.com/duofogphb/image/upload/v1707680560/campHaven/anomfrxc7qsut1v5e3gp.jpg',
-          filename: 'campHaven/anomfrxc7qsut1v5e3gp',
+          url: 'https://res.cloudinary.com/duofogphb/image/upload/e_improve:outdoor/campHaven/u7h5e9v2sbzgjrilqv3d.jpg',
+          filename: 'campHaven/u7h5e9v2sbzgjrilqv3d',
         },
         {
           url: 'https://res.cloudinary.com/duofogphb/image/upload/v1707680560/campHaven/oaxmt7icrtzfv6eerwsm.jpg',

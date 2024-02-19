@@ -7,10 +7,6 @@ style: 'mapbox://styles/mapbox/dark-v11',
 center: [-103.5917, 40.6699],
 zoom: 3
 });
-
-{
-
-}
  
 map.on('load', () => {
 // Add a new source from our GeoJSON data and

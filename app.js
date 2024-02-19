@@ -15,14 +15,21 @@ const flash = require('connect-flash')
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
 const User = require('./models/user')
-
 const campgrounds = require('./routes/camgrounds')
 const reviewRoutes = require('./routes/reviews')
 const usersRoutes = require('./routes/user')
 
+const bodyParser = require('body-parser');
+const mongoSanitize = require('express-mongo-sanitize');
+
+const MongoStore = require('connect-mongo');
+
+const dbUrl = "mongodb://localhost:27017/campHaven"
+
 mongoose.connect('mongodb://localhost:27017/campHaven', {})
 
 const db = mongoose.connection
+
 db.on('error', console.error.bind(console, 'connection error:'))
 db.once('once', () => {
   console.log('DataBase Connected!')
@@ -37,26 +44,51 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
 
+
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  // Refresh after 1 day
+  touchAfter: 24 * 60 * 60,
+  crypto: {
+      secret: 'Mysecret!'
+  }
+});
+
+store.on("error", function(e)
+{
+  console.log("Session Store Error"); 
+
+})
+
 const sessionConfig = {
+  store, 
+  name: "session",
   secret: 'mySecret',
   resave: false,
   saveUninitailized: true,
   cookie: {
+    httOnly: true,
     expires: Date.now() + 1000 * 3600 * 24,
     maxAge: 1000 * 3600 * 24,
   },
 }
 app.use(session(sessionConfig))
 app.use(flash())
+
+
 app.use(passport.initialize())
 app.use(passport.session())
 passport.use(new LocalStrategy(User.authenticate()))
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(mongoSanitize())
 
 passport.serializeUser(User.serializeUser())
 passport.deserializeUser(User.deserializeUser())
 
 app.use((req, res, next) => {
-  
+  console.log(req.query)
   res.locals.currentUser = req.user; 
   res.locals.success = req.flash('success')
   res.locals.error = req.flash('error')
@@ -68,6 +100,8 @@ app.use(methodOverride('_method'))
 app.use('/', usersRoutes)
 app.use('/campgrounds', campgrounds)
 app.use('/campgrounds/:id/reviews', reviewRoutes)
+
+
 
 app.get('/', (req, res) => {
   res.render('home')
