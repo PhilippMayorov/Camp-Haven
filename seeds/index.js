@@ -26,16 +26,8 @@ const seedDB = async () => {
   for (let i = 0; i < 100; i++) {
     const random1000 = Math.floor(Math.random() * 1000)
     const price = Math.floor(Math.floor(Math.random() * 20) + 10)
-
     const location = `${cities[random1000].city}, ${cities[random1000].state}`
-
-    // const geoData = await geocoder.forwardGeocode({
-    //   query: location,
-    //   limit: 1
-    // }).send()
-
-    // const geometry = geoData.body.features[0].geometry
-
+    
     const camp = new Campground({
       //Test author
       author: "65c13d27691b711e3ecd3803", 

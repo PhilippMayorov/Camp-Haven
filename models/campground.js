@@ -14,8 +14,6 @@ ImageSchema.virtual('thumbnail').get(function () {
 
 const opts = { toJSON: {virtuals: true}}
 
-
-//Isuess is here
 const CampgroundSchema = new Schema({
   title: String,
   images: [ImageSchema],

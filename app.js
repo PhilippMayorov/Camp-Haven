@@ -21,29 +21,24 @@ const usersRoutes = require('./routes/user')
 
 const bodyParser = require('body-parser');
 const mongoSanitize = require('express-mongo-sanitize');
-
 const MongoStore = require('connect-mongo');
 
 const dbUrl = process.env.DBURL || "mongodb://localhost:27017/campHaven"
-
 mongoose.connect(dbUrl, {})
 
 const db = mongoose.connection
-
 db.on('error', console.error.bind(console, 'connection error:'))
 db.once('once', () => {
   console.log('DataBase Connected!')
 })
 
 const app = express()
-
 app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
-
 
 const store = MongoStore.create({
   mongoUrl: dbUrl,
@@ -57,7 +52,6 @@ const store = MongoStore.create({
 store.on("error", function(e)
 {
   console.log("Session Store Error"); 
-
 })
 
 const sessionConfig = {
@@ -74,7 +68,6 @@ const sessionConfig = {
 }
 app.use(session(sessionConfig))
 app.use(flash())
-
 
 app.use(passport.initialize())
 app.use(passport.session())
@@ -100,8 +93,6 @@ app.use(methodOverride('_method'))
 app.use('/', usersRoutes)
 app.use('/campgrounds', campgrounds)
 app.use('/campgrounds/:id/reviews', reviewRoutes)
-
-
 
 app.get('/', (req, res) => {
   res.render('home')
