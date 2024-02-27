@@ -23,7 +23,11 @@ const bodyParser = require('body-parser');
 const mongoSanitize = require('express-mongo-sanitize');
 const MongoStore = require('connect-mongo');
 
-const dbUrl = process.env.DBURL || "mongodb://localhost:27017/campHaven"
+// const dbUrl = "mongodb://localhost:27017/campHaven"
+
+// For production 
+const dbUrl = process.env.DBURL 
+
 mongoose.connect(dbUrl, {})
 
 const db = mongoose.connection
@@ -40,6 +44,7 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
 
+console.log("before Store")
 const store = MongoStore.create({
   mongoUrl: dbUrl,
   // Refresh after 1 day
@@ -59,13 +64,15 @@ const sessionConfig = {
   name: "session",
   secret: 'mySecret',
   resave: false,
-  saveUninitailized: true,
+  saveUninitialized: true,
   cookie: {
     httOnly: true,
     expires: Date.now() + 1000 * 3600 * 24,
     maxAge: 1000 * 3600 * 24,
   },
 }
+
+console.log(session)
 app.use(session(sessionConfig))
 app.use(flash())
 
