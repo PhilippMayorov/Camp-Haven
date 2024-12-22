@@ -32,8 +32,6 @@ const MongoStore = require('connect-mongo')
 // For production
 const dbUrl = process.env.DBURL2
 
-console.log('Database URL:', dbUrl.replace(/:([^:@]{1,})@/, ':****@'))
-
 mongoose
   .connect(dbUrl, {
     // Add these options for better error handling
