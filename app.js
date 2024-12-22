@@ -32,6 +32,9 @@ const MongoStore = require('connect-mongo')
 // For production
 const dbUrl = process.env.DBURL
 
+console.log('Environment:', process.env.NODE_ENV)
+console.log('DBURL:', process.env.DBURL || 'Not set')
+
 mongoose
   .connect(dbUrl, {
     // Add these options for better error handling
