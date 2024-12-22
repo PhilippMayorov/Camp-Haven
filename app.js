@@ -30,7 +30,7 @@ const MongoStore = require('connect-mongo')
 // New code:
 
 // For production
-const dbUrl = process.env.DBURL2
+const dbUrl = process.env.DBURL
 
 mongoose
   .connect(dbUrl, {
@@ -92,13 +92,12 @@ const sessionConfig = {
   saveUninitialized: true,
   cookie: {
     httOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    // secure: process.env.NODE_ENV === 'production',
     expires: Date.now() + 1000 * 3600 * 24,
     maxAge: 1000 * 3600 * 24,
   },
 }
 
-console.log(session)
 app.use(session(sessionConfig))
 app.use(flash())
 
