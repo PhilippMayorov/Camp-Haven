@@ -27,22 +27,26 @@ const seedDB = async () => {
     const random1000 = Math.floor(Math.random() * 1000)
     const price = Math.floor(Math.floor(Math.random() * 20) + 10)
     const location = `${cities[random1000].city}, ${cities[random1000].state}`
-    
+
     const camp = new Campground({
       //Test author
-      author: "65c13d27691b711e3ecd3803", 
+      author: '65c13d27691b711e3ecd3803',
 
       location: location,
       title: `${descriptors[sample(descriptors)]} ${places[sample(places)]}`,
-      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero asperiores dolorum cumque. Sequi, aspernatur magnam quibusdam dicta non pariatur illum optio nesciunt porro quas quos at quidem, exercitationem praesentium numquam.',
+      description:
+        'Lorem ipsum dolor sit amet consectetur adipisicing elit. Libero asperiores dolorum cumque. Sequi, aspernatur magnam quibusdam dicta non pariatur illum optio nesciunt porro quas quos at quidem, exercitationem praesentium numquam.',
       price: price,
 
-    // For now using fake data to not overload API
-      geometry: 
-      {
-        type: 'Point', coordinates: [cities[random1000].longitude, cities[random1000].latitude]
+      // For now using fake data to not overload API
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          cities[random1000].longitude,
+          cities[random1000].latitude,
+        ],
       },
-      images:  [
+      images: [
         {
           url: 'https://res.cloudinary.com/duofogphb/image/upload/e_improve:outdoor/campHaven/u7h5e9v2sbzgjrilqv3d.jpg',
           filename: 'campHaven/u7h5e9v2sbzgjrilqv3d',
@@ -50,8 +54,8 @@ const seedDB = async () => {
         {
           url: 'https://res.cloudinary.com/duofogphb/image/upload/v1707680560/campHaven/oaxmt7icrtzfv6eerwsm.jpg',
           filename: 'campHaven/oaxmt7icrtzfv6eerwsm',
-        }
-      ]
+        },
+      ],
     })
     console.log(camp)
     await camp.save()

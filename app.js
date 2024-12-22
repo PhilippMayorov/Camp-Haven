@@ -1,6 +1,5 @@
-if (process.env.NODE_ENV !== "production")
-{
-  require("dotenv").config()
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
 }
 
 const express = require('express')
@@ -19,16 +18,39 @@ const campgrounds = require('./routes/camgrounds')
 const reviewRoutes = require('./routes/reviews')
 const usersRoutes = require('./routes/user')
 
-const bodyParser = require('body-parser');
-const mongoSanitize = require('express-mongo-sanitize');
-const MongoStore = require('connect-mongo');
+const bodyParser = require('body-parser')
+const mongoSanitize = require('express-mongo-sanitize')
+const MongoStore = require('connect-mongo')
 
-// const dbUrl = "mongodb://localhost:27017/campHaven"
+// For Local Enviroment
+// Prev Code:
+// const dbUrl = 'mongodb://localhost:27017/campHaven'
 
-// For production 
-const dbUrl = process.env.DBURL 
+// const dbUrl = 'mongodb://127.0.0.1:27017/campHaven'
+// New code:
 
-mongoose.connect(dbUrl, {})
+// For production
+const dbUrl = process.env.DBURL2
+
+console.log('Database URL:', dbUrl.replace(/:([^:@]{1,})@/, ':****@'))
+
+mongoose
+  .connect(dbUrl, {
+    // Add these options for better error handling
+    // useNewUrlParser: true,
+    // useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log('Successfully connected to MongoDB.')
+  })
+  .catch((err) => {
+    console.error('MongoDB connection error details:', {
+      name: err.name,
+      message: err.message,
+      code: err.code,
+    })
+    process.exit(1)
+  })
 
 const db = mongoose.connection
 db.on('error', console.error.bind(console, 'connection error:'))
@@ -44,24 +66,23 @@ app.set('views', path.join(__dirname, 'views'))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
 
-console.log("before Store")
+console.log('before Store')
 const store = MongoStore.create({
   mongoUrl: dbUrl,
   // Refresh after 1 day
   touchAfter: 24 * 60 * 60,
   crypto: {
-      secret: 'Mysecret!'
-  }
-});
+    secret: 'Mysecret!',
+  },
+})
 
-store.on("error", function(e)
-{
-  console.log("Session Store Error"); 
+store.on('error', function (e) {
+  console.log('Session Store Error')
 })
 
 const sessionConfig = {
-  store, 
-  name: "session",
+  store,
+  name: 'session',
   secret: 'mySecret',
   resave: false,
   saveUninitialized: true,
@@ -80,8 +101,8 @@ app.use(passport.initialize())
 app.use(passport.session())
 passport.use(new LocalStrategy(User.authenticate()))
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 app.use(mongoSanitize())
 
 passport.serializeUser(User.serializeUser())
@@ -89,7 +110,7 @@ passport.deserializeUser(User.deserializeUser())
 
 app.use((req, res, next) => {
   console.log(req.query)
-  res.locals.currentUser = req.user; 
+  res.locals.currentUser = req.user
   res.locals.success = req.flash('success')
   res.locals.error = req.flash('error')
   next()
