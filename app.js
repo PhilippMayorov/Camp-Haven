@@ -65,27 +65,34 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static(path.join(__dirname, 'public')))
 
 console.log('before Store')
-const store = MongoStore.create({
-  mongoUrl: dbUrl,
-  // Refresh after 1 day
-  touchAfter: 24 * 60 * 60,
-  crypto: {
-    secret: 'Mysecret!',
-  },
-})
 
-store.on('error', function (e) {
-  console.log('Session Store Error')
-})
+let store
+try {
+  store = MongoStore.create({
+    mongoUrl: dbUrl,
+    touchAfter: 24 * 60 * 60,
+    crypto: {
+      secret: 'Mysecret!',
+    },
+  })
+
+  store.on('error', function (e) {
+    console.log('Session Store Error:', e)
+  })
+} catch (err) {
+  console.error('Failed to initialize MongoStore:', err)
+  process.exit(1)
+}
 
 const sessionConfig = {
   store,
   name: 'session',
-  secret: 'mySecret',
+  secret: 'Mysecret!',
   resave: false,
   saveUninitialized: true,
   cookie: {
     httOnly: true,
+    secure: process.env.NODE_ENV === 'production',
     expires: Date.now() + 1000 * 3600 * 24,
     maxAge: 1000 * 3600 * 24,
   },
